@@ -11,34 +11,34 @@ INPUT_FILE=$2  # 테스트 입력 데이터 파일
 OUTPUT_LOG="test_run_$(date +%Y%m%d_%H%M%S).log"
 ERROR_FLAG=0 # 오류 발생 플래그 (0: 정상, 1: 오류)
 
-echo "테스트 시작: $(date)"
-echo "대상 소스코드: $SOURCE_FILE, 입력 파일: $INPUT_FILE"
+echo "테스트 시작: $(date)" | tee -a "$OUTPUT_LOG"
+echo "대상 소스코드: $SOURCE_FILE, 입력 파일: $INPUT_FILE" | tee -a "$OUTPUT_LOG"
 
 # ------------------------------------------------------------------------------
 # [기능 1] 소스코드 자동 처리 모듈
 # ------------------------------------------------------------------------------
-echo -e "\n--- 1. 소스코드 컴파일/처리 ---"
+echo -e "\n--- 1. 소스코드 컴파일/처리 ---" | tee -a "$OUTPUT_LOG"
 if [[ "$SOURCE_FILE" == *".c" ]]; then
-    echo "C 파일을 컴파일 합니다..."
+    echo "C 파일을 컴파일 합니다..." | tee -a "$OUTPUT_LOG"
     gcc "$SOURCE_FILE" -o "./test_program" 2>> "$OUTPUT_LOG"
 
     if [ $? -ne 0 ]; then
-        echo "ERROR: 컴파일 실패!"
+        echo "ERROR: 컴파일 실패!" | tee -a "$OUTPUT_LOG"
         ERROR_FLAG=1
     fi
 
 elif [[ "SOURCE_FILE" == *".py" ]]; then
-    echo "Python 파일의 실행 권한을 설정합니다."
+    echo "Python 파일의 실행 권한을 설정합니다." | tee -a "$OUTPUT_LOG"
     chmod +x "SOURCE_FILE"
-    
+
 else
-    echo "ERROR: 지원하지 않는 파일 형식입니다."
+    echo "ERROR: 지원하지 않는 파일 형식입니다." | tee -a "$OUTPUT_LOG"
     ERROR_FLAG=1
 fi 
 
 # 컴파일 실패 시 스크립트 종료
 if [ $ERROR_FLAG -ne 0 ]; then
-    echo "테스트가 중단되었습니다."
+    echo "테스트가 중단되었습니다." | tee -a "$OUTPUT_LOG"
     exit 1
 fi
 
