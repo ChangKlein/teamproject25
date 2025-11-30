@@ -20,9 +20,17 @@ echo "대상 소스코드: $SOURCE_FILE, 입력 파일: $INPUT_FILE"
 echo -e "\n--- 1. 소스코드 컴파일/처리 ---"
 if [[ "$SOURCE_FILE" == *".c" ]]; then
     echo "C 파일을 컴파일 합니다..."
-    gcc "$SOURCE_FILE" -o "./test_program"
+    gcc "$SOURCE_FILE" -o "./test_program" 2>> "$OUTPUT_LOG"
+
+    if [ $? -ne 0 ]; then
+        echo "ERROR: 컴파일 실패!"
+        ERROR_FLAG=1
+    fi
+
 elif [[ "SOURCE_FILE" == *".py" ]]; then
-    :
+    echo "Python 파일의 실행 권한을 설정합니다."
+    chmod +x "SOURCE_FILE"
+    
 else
     echo "ERROR: 지원하지 않는 파일 형식입니다."
     ERROR_FLAG=1
