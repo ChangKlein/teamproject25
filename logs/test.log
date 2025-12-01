@@ -1,0 +1,6 @@
+[INFO] Running tests...
+[TEST] Input file: tests/inputs/test1.in
+  [C] Running build/example < tests/inputs/test1.in
+[TEST] Input file: tests/inputs/test2.in
+  [C] Running build/example < tests/inputs/test2.in
+[INFO] Tests finished
