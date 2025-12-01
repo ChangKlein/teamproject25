@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Auto build script for C and Python files
-# Scans src/, compiles C with gcc, checks Python syntax.
-# Logs are written to logs/build.log.
+# This script scans the src/ directory, compiles C files with gcc,
+# and checks Python files with python3 -m py_compile.
+# All logs are written to logs/build.log.
 
-set -e
+set -e  # stop on error
 
 SRC_DIR="src"
 BUILD_DIR="build"
@@ -12,12 +13,15 @@ LOG_DIR="logs"
 mkdir -p "$BUILD_DIR" "$LOG_DIR"
 
 BUILD_LOG="$LOG_DIR/build.log"
+
+# clear old log
 : > "$BUILD_LOG"
 
 echo "[INFO] Auto build start" | tee -a "$BUILD_LOG"
 echo "[INFO] Scanning directory: $SRC_DIR" | tee -a "$BUILD_LOG"
 
 for f in "$SRC_DIR"/*; do
+    # if there is no file, skip
     [ -e "$f" ] || continue
 
     case "$f" in
