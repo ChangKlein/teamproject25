@@ -1,11 +1,15 @@
 #include <stdio.h>
 
 int main(void) {
-    int x;
-    if (scanf("%d", &x) != 1) {
-        fprintf(stderr, "Failed to read input\n");
-        return 1;
+    char buf[256];
+    int line = 0;
+
+    // Read from standard input line by line
+    while (fgets(buf, sizeof(buf), stdin)) {
+        line++;
+        // Print each line with a line number
+        printf("Line %d: %s", line, buf);
     }
-    printf("%d\n", x * 2);
+
     return 0;
 }

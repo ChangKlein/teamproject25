@@ -1,5 +1,8 @@
 [INFO] Auto build start
 [INFO] Scanning directory: src
+[SKIP] Not a C/Python file: src/__pycache__
 [C] Compiling src/example.c -> build/example
 [C] SUCCESS: build/example
+[PY] Checking syntax for src/example.py
+[PY] OK: src/example.py
 [INFO] Auto build done

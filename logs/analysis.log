@@ -1,3 +1,11 @@
 [INFO] Analyzing logs...
+logs/system.log:  501 24883     1   0  1:31AM ??         0:00.12 /System/Library/PrivateFrameworks/UniversalAccess.framework/Versions/A/Resources/universalAccessAuthWarn.app/Contents/MacOS/universalAccessAuthWarn launchd -s
 logs/system.log:[WARN] netstat not available
 [ANALYSIS] Number of C build lines: 2
+[INFO] Listing log files (name + time)
+logs/analysis.log 2025-12-03 01:49
+logs/test.log 2025-12-03 01:17
+logs/system.log 2025-12-03 01:49
+logs/build.log 2025-12-03 01:48
+[INFO] Git branch graph
+[WARN] git log graph failed (not a git repo?)

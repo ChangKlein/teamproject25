@@ -1,44 +1,38 @@
 #!/usr/bin/env bash
-# Test runner script
-# - Takes input files from tests/inputs/*.in
-# - Runs both the C program (build/example)
-# - And the Python program (src/example.py)
-# - Saves results into tests/outputs/
+# Run tests differently for test1 and test2
+# test1 -> run C only
+# test2 -> run Python only
 
 set -e
 
+TEST_DIR="tests/inputs"
+OUT_DIR="tests/outputs"
 BUILD_DIR="build"
-INPUT_DIR="tests/inputs"
-OUTPUT_DIR="tests/outputs"
-LOG_DIR="logs"
 
-mkdir -p "$OUTPUT_DIR" "$LOG_DIR"
+mkdir -p "$OUT_DIR"
 
-TEST_LOG="$LOG_DIR/test.log"
-: > "$TEST_LOG"
+echo "[INFO] Running tests..."
 
-C_PROG="$BUILD_DIR/example"
-PY_PROG="src/example.py"
+for infile in "$TEST_DIR"/*.in; do
+    name=$(basename "$infile" .in)
 
-echo "[INFO] Running tests..." | tee -a "$TEST_LOG"
+    echo "[TEST] Input file: $infile"
 
-for input in "$INPUT_DIR"/*.in; do
-    name=$(basename "$input" .in)
-    echo "[TEST] Input file: $input" | tee -a "$TEST_LOG"
-
-    # Run C program
-    if [ -x "$C_PROG" ]; then
-        out_c="$OUTPUT_DIR/${name}_c.out"
-        echo "  [C] Running $C_PROG < $input" | tee -a "$TEST_LOG"
-        "$C_PROG" < "$input" > "$out_c"
+    if [ "$name" = "test1" ]; then
+        # C ONLY
+        outfile="$OUT_DIR/${name}_c.out"
+        echo "  [C] Running $BUILD_DIR/example < $infile"
+        "$BUILD_DIR/example" < "$infile" > "$outfile"
+        echo "  [C] Output saved to $outfile"
     fi
 
-    # Run Python program
-    if [ -f "$PY_PROG" ]; then
-        out_py="$OUTPUT_DIR/${name}_py.out"
-        echo "  [PY] Running python3 $PY_PROG < $input" | tee -a "$TEST_LOG"
-        python3 "$PY_PROG" < "$input" > "$out_py"
+    if [ "$name" = "test2" ]; then
+        # Python ONLY
+        outfile="$OUT_DIR/${name}_py.out"
+        echo "  [PY] Running python3 src/example.py < $infile"
+        python3 src/example.py < "$infile" > "$outfile"
+        echo "  [PY] Output saved to $outfile"
     fi
 done
 
-echo "[INFO] Tests finished" | tee -a "$TEST_LOG"
+echo "[INFO] Tests finished"

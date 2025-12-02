@@ -33,6 +33,21 @@ if [ -f "$LOG_DIR/build.log" ]; then
 fi
 
 # Example: list all log files and their modification time
-find "$LOG_DIR" -type f -name "*.log" -printf "%f %TY-%Tm-%Td %TH:%TM\n" >> "$ANALYSIS_LOG"
+echo "[INFO] Listing log files (name + time)" >> "$ANALYSIS_LOG"
+
+# If GNU find is available (e.g., on Linux or with gfind), use -printf
+if command -v gfind >/dev/null 2>&1; then
+    gfind "$LOG_DIR" -type f -name "*.log" -printf "%f %TY-%Tm-%Td %TH:%TM\n" >> "$ANALYSIS_LOG"
+else
+    # macOS/BSD find: use stat instead of -printf
+    find "$LOG_DIR" -type f -name "*.log" -exec stat -f "%N %Sm" -t "%Y-%m-%d %H:%M" {} \; >> "$ANALYSIS_LOG"
+fi
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+echo "[INFO] Git branch graph" >> "$ANALYSIS_LOG"
+# Show a simple git graph (needs to be run in the repo root)
+git -C "$REPO_ROOT" log —oneline —graph —all —decorate >> "$ANALYSIS_LOG" 2>/dev/null || \
+    echo "[WARN] git log graph failed (not a git repo?)" >> "$ANALYSIS_LOG"
 
 echo "[INFO] Logging & analysis finished at $(date)" | tee -a "$SYS_LOG"
